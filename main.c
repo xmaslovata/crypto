@@ -9,10 +9,11 @@ typedef struct
     int time;
 } TRADE;
 
-void print_trade(TRADE *trade)
+void printTrade(TRADE *trade)
 {
     printf("Token: %s\n", trade->token);
     printf("Type: %s\n", trade->type);
+    printf("Amount: %d\n", trade->amount);
     printf("Price: %lf\n", trade->price);
     printf("Time: %d\n", trade->time);
 }
@@ -34,15 +35,29 @@ void updateStats(TokenStats *stats, TRADE trade)
     stats->total_volume += trade.amount;
     stats->sum_price += trade.price;
     stats->last_price = trade.price;
+
     if(stats->trades == 1)
     {
         stats->min_price = trade.price;
         stats->max_price = trade.price;
     }
+
     if(trade.price < stats->min_price)
         stats->min_price = trade.price;
+
     if(trade.price > stats->max_price)
         stats->max_price = trade.price;
+}
+
+void printStats(TokenStats *stats)
+{
+    printf("Token: %s\n", stats->token);
+    printf("Trades: %d\n", stats->trades);
+    printf("Total volume: %lf\n", stats->total_volume);
+    printf("Min price: %lf\n", stats->min_price);
+    printf("Max price: %lf\n", stats->max_price);
+    printf("Last price: %lf\n", stats->last_price);
+    printf("Sum price: %lf\n", stats->sum_price);
 }
 
 int main(void)
