@@ -14,7 +14,7 @@ void printTrade(TRADE *trade)
     printf("Token: %s\n", trade->token);
     printf("Type: %s\n", trade->type);
     printf("Amount: %d\n", trade->amount);
-    printf("Price: %lf\n", trade->price);
+    printf("Price: %.2lf\n", trade->price);
     printf("Time: %d\n", trade->time);
 }
 
@@ -53,14 +53,27 @@ void printStats(TokenStats *stats)
 {
     printf("Token: %s\n", stats->token);
     printf("Trades: %d\n", stats->trades);
-    printf("Total volume: %lf\n", stats->total_volume);
-    printf("Min price: %lf\n", stats->min_price);
-    printf("Max price: %lf\n", stats->max_price);
-    printf("Last price: %lf\n", stats->last_price);
-    printf("Sum price: %lf\n", stats->sum_price);
+    printf("Total volume: %.2lf\n", stats->total_volume);
+    printf("Min price: %.2lf\n", stats->min_price);
+    printf("Max price: %.2lf\n", stats->max_price);
+    printf("Last price: %.2lf\n", stats->last_price);
+    printf("Sum price: %.2lf\n", stats->sum_price);
 }
 
 int main(void)
 {
+    TRADE trade1 = {"DOGE", "BUY", 100, 0.45, 10};
+    TRADE trade2 = {"DOGE", "SELL", 50, 0.50, 11};
+    TokenStats stats = {"DOGE", 0, 0.0,  0.0, 0.0, 0.0, 0.0};
+
+    printf("Testovaci vypis trade1:\n");
+    printTrade(&trade1);
+    printf("\n");
+
+    updateStats(&stats, trade1);
+    updateStats(&stats, trade2);
+
+    printStats(&stats);
+
     return 0;
 }
