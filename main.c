@@ -60,6 +60,12 @@ void printStats(TokenStats *stats)
     printf("Sum price: %.2lf\n", stats->sum_price);
 }
 
+typedef struct TokenNode
+{
+    TokenStats stats;
+    struct TokenNode *next;
+} TokenNode;
+
 int main(void)
 {
     TRADE trade1 = {"DOGE", "BUY", 100, 0.45, 10};
