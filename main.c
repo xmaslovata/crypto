@@ -18,6 +18,14 @@ void printTrade(TRADE *trade)
     printf("Time: %d\n", trade->time);
 }
 
+double averagePrice(TokenStats *stats)
+{
+    if (stats->trades == 0)
+        return 0;
+
+    return stats->sum_price / stats->trades;
+}
+
 typedef struct
 {
     char *token;
@@ -68,18 +76,6 @@ typedef struct TokenNode
 
 int main(void)
 {
-    TRADE trade1 = {"DOGE", "BUY", 100, 0.45, 10};
-    TRADE trade2 = {"DOGE", "SELL", 50, 0.50, 11};
-    TokenStats stats = {"DOGE", 0, 0.0,  0.0, 0.0, 0.0, 0.0};
-
-    printf("Testovaci vypis trade1:\n");
-    printTrade(&trade1);
-    printf("\n");
-
-    updateStats(&stats, trade1);
-    updateStats(&stats, trade2);
-
-    printStats(&stats);
 
     return 0;
 }
