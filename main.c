@@ -65,24 +65,12 @@ double priceVolatility(TokenStats *stats)
 	return sqrt(variance);
 }
 
-void updateStats(TokenStats *stats, TRADE trade)
+void updateStats(TokenStats *stats, TRADE *trade)
 {
     stats->trades++;
-    stats->total_volume += trade.amount;
     stats->sum_price += trade.price;
-    stats->last_price = trade.price;
-
-    if(stats->trades == 1)
-    {
-        stats->min_price = trade.price;
-        stats->max_price = trade.price;
-    }
-
-    if(trade.price < stats->min_price)
-        stats->min_price = trade.price;
-
-    if(trade.price > stats->max_price)
-        stats->max_price = trade.price;
+    stats->sum_price_sq += (double) trade.price * trade.price;
+	stats->last_price = (double) trade.price;
 }
 
 void printStats(TokenStats *stats)
