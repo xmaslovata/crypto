@@ -105,6 +105,40 @@ TokenNode *findToken(TokenNode *list, char *token)
 	return NULL;
 }
 
+TokenNode *newToken(char *token)
+{
+    TokenNode *node;
+
+    node = malloc(sizeof(TokenNode));
+
+    if(node == NULL)
+    {
+        fprintf(stderr, "Out of memory.\n");
+        exit(ALLOCATION_ERROR);
+    }
+
+    node->stats.token = malloc(strlen(token) + 1);
+
+    if(node->stats.token == NULL)
+    {
+        fprintf(stderr, "Out of memory.\n");
+        exit(ALLOCATION_ERROR);
+    }
+
+    strcpy(node->stats.token, token);
+
+    node->stats.trades = 0;
+    node->stats.last_price = 0;
+    node->stats.sum_price = 0;
+    node->stats.sum_price_sq = 0;
+
+    node->first_trade = NULL;
+    node->last_trade = NULL;
+    node->next = NULL;
+
+    return node;
+}
+
 int main(void)
 {
 
