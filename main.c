@@ -1,12 +1,11 @@
 #include <stdio.h>
+#include <time.h>
 
 typedef struct
 {
     char *token;
-    char *type;
-    int amount;
-    double price;
-    int time;
+    long price;
+	time_t time;
 } TRADE;
 
 typedef struct TradeNode
@@ -30,15 +29,13 @@ typedef struct TokenNode
     TradeNode *first_trade;
 	TradeNode *last_trade;
 	struct TokenNode *next;
-} TradeNode;
+} TokenNode;
 
 void printTrade(TRADE *trade)
 {
     printf("Token: %s\n", trade->token);
-    printf("Type: %s\n", trade->type);
-    printf("Amount: %d\n", trade->amount);
-    printf("Price: %.2lf\n", trade->price);
-    printf("Time: %d\n", trade->time);
+    printf("Price: %ld\n", trade->price);
+    printf("Time: %ld\n", trade->time);
 }
 
 double averagePrice(TokenStats *stats)
@@ -48,6 +45,26 @@ double averagePrice(TokenStats *stats)
 
     return stats->sum_price / stats->trades;
 }
+
+double priceVolatility(TokenStats *stats)
+{
+	double mean;
+	double mean_sq;
+	double variance;
+
+	if(stats->trades == 0)
+		return 0;
+
+	mean = averagePrice(stats);
+	mean_sq = stats->sum_price_sq / stats->trades;
+	variance = mean_sq - mean * mean;
+
+	if(variance <= 0)
+		variance = 0;
+
+	return sqrt(variance);
+}
+
 void updateStats(TokenStats *stats, TRADE trade)
 {
     stats->trades++;
