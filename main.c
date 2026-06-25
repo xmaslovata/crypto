@@ -73,15 +73,12 @@ void updateStats(TokenStats *stats, TRADE *trade)
 	stats->last_price = (double) trade.price;
 }
 
-void printStats(TokenStats *stats)
+void printStats(TokenStats *stats, int decimals)
 {
     printf("Token: %s\n", stats->token);
     printf("Trades: %d\n", stats->trades);
-    printf("Total volume: %.2lf\n", stats->total_volume);
-    printf("Min price: %.2lf\n", stats->min_price);
-    printf("Max price: %.2lf\n", stats->max_price);
-    printf("Last price: %.2lf\n", stats->last_price);
-    printf("Sum price: %.2lf\n", stats->sum_price);
+	printf("Average price: %.*lf\n", decimals, averagePrice(stats));
+	printf("Volatility: %.*lf\n", decimals, priceVolatility(stats));
 }
 
 int main(void)
