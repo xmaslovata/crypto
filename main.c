@@ -81,6 +81,13 @@ void printStats(TokenStats *stats, int decimals)
 	printf("Volatility: %.*lf\n", decimals, priceVolatility(stats));
 }
 
+void removeStats(TokenStats *stats, TRADE *trade)
+{
+	stats->trades--;
+	stats->sum_price -= trade->price;
+	stats->sum_price_sq -= (double) trade->price * trade->price;
+}
+
 int main(void)
 {
 
