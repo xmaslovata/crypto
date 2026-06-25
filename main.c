@@ -139,6 +139,43 @@ TokenNode *newToken(char *token)
     return node;
 }
 
+void addTrade(TokenNode **list, TRADE *trade)
+{
+    TokenNode *node;
+    TradeNode *trade_node;
+
+    node = findToken(*list, trade->token);
+
+    if(node == NULL)
+    {
+        node = newToken(trade->token);
+        node->next = *list;
+        *list = node;
+    }
+
+    updateStats(&node->stats, trade);
+
+    trade_node = malloc(sizeof(TradeNode));
+
+    if(trade_node == NULL)
+    {
+        fprintf(stderr, "Out of memory.\n");
+        exit(ALLOCATION_ERROR);
+    }
+
+    trade_node->trade = *trade;
+    trade_node->trade.token = node->stats.token;
+    trade_node->next = NULL;
+
+    if(node->last_trade == NULL)
+        node->first_trade = trade_node;
+    else
+        node->last_trade->next = trade_node;
+
+    node->last_trade = trade_node;
+}
+
+
 int main(void)
 {
 
