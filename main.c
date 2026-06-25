@@ -88,6 +88,23 @@ void removeStats(TokenStats *stats, TRADE *trade)
 	stats->sum_price_sq -= (double) trade->price * trade->price;
 }
 
+TokenNode *findToken(TokenNode *list, char *token)
+{
+	TokenNode *node;
+
+	node = list;
+
+	while(node != NULL)
+	{
+		if(strcmp(node->stats.token, token) == 0)
+			return node;
+
+	node = node->next;
+	}
+
+	return NULL;
+}
+
 int main(void)
 {
 
