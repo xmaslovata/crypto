@@ -9,6 +9,29 @@ typedef struct
     int time;
 } TRADE;
 
+typedef struct TradeNode
+{
+    TRADE trade;
+    struct TradeNode *next;
+} TradeNode;
+
+typedef struct
+{
+    char *token;
+    int  trades;
+    double last_price;
+    double sum_price;
+    double sum_price_sq;
+} TokenStats;
+
+typedef struct TokenNode
+{
+    TokenStats stats;
+    TradeNode *first_trade;
+	TradeNode *last_trade;
+	struct TokenNode *next;
+} TradeNode;
+
 void printTrade(TRADE *trade)
 {
     printf("Token: %s\n", trade->token);
@@ -25,18 +48,6 @@ double averagePrice(TokenStats *stats)
 
     return stats->sum_price / stats->trades;
 }
-
-typedef struct
-{
-    char *token;
-    int  trades;
-    double total_volume;
-    double min_price;
-    double max_price;
-    double last_price;
-    double sum_price;
-} TokenStats;
-
 void updateStats(TokenStats *stats, TRADE trade)
 {
     stats->trades++;
@@ -67,12 +78,6 @@ void printStats(TokenStats *stats)
     printf("Last price: %.2lf\n", stats->last_price);
     printf("Sum price: %.2lf\n", stats->sum_price);
 }
-
-typedef struct TokenNode
-{
-    TokenStats stats;
-    struct TokenNode *next;
-} TokenNode;
 
 int main(void)
 {
