@@ -175,6 +175,49 @@ void addTrade(TokenNode **list, TRADE *trade)
     node->last_trade = trade_node;
 }
 
+void removeOldTrades(TokenNode **list, time_t now, int window_seconds)
+{
+    TokenNode *node;
+    TokenNode *prev;
+    TokenNode *next_node;
+    TradeNode *old_trade;
+
+    prev = NULL;
+    node = *list;
+
+    while(node != NULL)
+    {
+        while(node->first_trade != NULL && now - node->first_trade->trade.time >= window_seconds)
+        {
+            old_trade = node->first_trade;
+
+            removeStats(&node->stats, &old_trade->trade);
+
+            node->first_trade = old_trade->next;
+
+            if(node->first_trade == NULL)
+                node->last_trade = NULL;
+
+            free(old_trade);
+        }
+
+        next_node = node->next;
+
+        if(node->stats.trades == 0)
+        {
+            if(prev == NULL)
+                *list = next_node;
+            else
+                prev->next = next_node;
+
+            freeToken(node);
+        }
+        else
+            prev = node;
+
+        node = next_node;
+    }
+}
 
 int main(void)
 {
