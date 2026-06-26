@@ -252,6 +252,31 @@ int nextRemovalWait(TokenNode *list, time_t now, int window_seconds)
     return wait;
 }
 
+void freeAllTokens(TokenNode *list)
+{
+    TokenNode *node;
+    TokenNode *next_node;
+    TradeNode *trade_node;
+    TradeNode *next_trade;
+
+    node = list;
+
+    while(node != NULL)
+    {
+        next_node = node->next;
+        trade_node = node->first_trade;
+
+        while(trade_node != NULL)
+        {
+            next_trade = trade_node->next;
+            free(trade_node);
+            trade_node = next_trade;
+        }
+
+        freeToken(node);
+        node = next_node;
+    }
+}
 
 int main(void)
 {
