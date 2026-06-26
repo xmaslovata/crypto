@@ -278,6 +278,27 @@ void freeAllTokens(TokenNode *list)
     }
 }
 
+void printReport(TokenNode *list, int decimals)
+{
+    TokenNode *node;
+
+    printf("\033[H\033[J");
+
+    for(node = list; node != NULL; node = node->next)
+        printStats(&node->stats, decimals);
+
+    fflush(stdout);
+}
+
+long currentMillis(void)
+{
+    struct timespec ts;
+
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+
+    return (long) ts.tv_sec * MILLISECONDS_PER_SECOND + ts.tv_nsec / 1000000;
+}
+
 int main(void)
 {
 
