@@ -299,6 +299,49 @@ long currentMillis(void)
     return (long) ts.tv_sec * MILLISECONDS_PER_SECOND + ts.tv_nsec / 1000000;
 }
 
+void parseArgs(int argc, char *argv[], int *window_seconds, int *lag_millis, int *decimals)
+{
+    int i;
+
+    *window_seconds = -1;
+    *lag_millis = -1;
+    *decimals = -1;
+
+    for(i = 1; i + 1 < argc; i += 2)
+    {
+        if(strcmp(argv[i], "-a") == 0)
+            *window_seconds = atoi(argv[i + 1]);
+        else if(strcmp(argv[i], "-l") == 0)
+            *lag_millis = atoi(argv[i + 1]);
+        else if(strcmp(argv[i], "-p") == 0)
+            *decimals = atoi(argv[i + 1]);
+    }
+
+    if(*window_seconds <= 0 || *lag_millis <= 0 || *decimals < 0)
+    {
+        fprintf(stderr, "Usage: monitor -a <window_seconds> -l <lag_millis> -p <decimals>\n");
+        exit(USAGE_ERROR);
+    }
+}
+
+int parseLine(char *line, TRADE *trade, char *token_buffer)
+{
+    long price;
+    long time_value;
+    int fields;
+
+    fields = sscanf(line, "%255s %ld %ld", token_buffer, &price, &time_value);
+
+    if(fields != 3)
+        return 0;
+
+    trade->token = token_buffer;
+    trade->price = price;
+    trade->time = (time_t) time_value;
+
+    return 1;
+}
+
 int main(void)
 {
 
