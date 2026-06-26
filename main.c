@@ -219,6 +219,40 @@ void removeOldTrades(TokenNode **list, time_t now, int window_seconds)
     }
 }
 
+int nextRemovalWait(TokenNode *list, time_t now, int window_seconds)
+{
+    TokenNode *node;
+    int wait;
+    int found;
+    int candidate;
+
+    found = 0;
+    wait = 0;
+
+    for(node = list; node != NULL; node = node->next)
+    {
+        if(node->first_trade == NULL)
+            continue;
+
+        candidate = (int) (node->first_trade->trade.time + window_seconds - now);
+
+        if(candidate < 0)
+            candidate = 0;
+
+        if(!found || candidate < wait)
+        {
+            wait = candidate;
+            found = 1;
+        }
+    }
+
+    if(!found)
+        return -1;
+
+    return wait;
+}
+
+
 int main(void)
 {
 
